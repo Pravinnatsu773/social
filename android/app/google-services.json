@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "912665399185",
+    "project_id": "social-e88f0",
+    "storage_bucket": "social-e88f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912665399185:android:c9b4c7268b7f9014c4d430",
+        "android_client_info": {
+          "package_name": "com.example.social4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAco1Ht08Up2vfsBQ3eOU7SC1WpeZiind0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912665399185:android:9925da64ba1e3d34c4d430",
+        "android_client_info": {
+          "package_name": "com.pravinnatsu.social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAco1Ht08Up2vfsBQ3eOU7SC1WpeZiind0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
