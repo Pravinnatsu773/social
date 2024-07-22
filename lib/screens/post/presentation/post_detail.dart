@@ -22,6 +22,10 @@ class _PostDetailState extends State<PostDetail> {
   final _commnetController = TextEditingController();
   bool allowReply = false;
   final focusNode = FocusNode();
+
+  Comment? selectedCommnet;
+
+  List<Comment> viewCommnets = [];
   @override
   void initState() {
     super.initState();
@@ -460,20 +464,42 @@ class _PostDetailState extends State<PostDetail> {
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                    // SizedBox(
-                                                                    //   width: 16,
-                                                                    // ),
-                                                                    // GestureDetector(
-                                                                    //   onTap:
-                                                                    //       () {},
-                                                                    //   child: Icon(
-                                                                    //     Icons
-                                                                    //         .mode_comment_outlined,
-                                                                    //     size: 16,
-                                                                    //     color: Color(
-                                                                    //         0xff3F3D4E),
-                                                                    //   ),
-                                                                    // ),
+                                                                    SizedBox(
+                                                                      width: 16,
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        selectedCommnet =
+                                                                            comment;
+                                                                        setState(
+                                                                            () {});
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .mode_comment_outlined,
+                                                                        size:
+                                                                            16,
+                                                                        color: Color(
+                                                                            0xff3F3D4E),
+                                                                      ),
+                                                                    ),
+                                                                    comment.repliesCount <
+                                                                            1
+                                                                        ? const SizedBox()
+                                                                        : Row(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                width: 4,
+                                                                              ),
+                                                                              CustomText(
+                                                                                text: comment.repliesCount.toString(),
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ),
+                                                                            ],
+                                                                          ),
                                                                   ],
                                                                 )
                                                               ],
@@ -485,177 +511,232 @@ class _PostDetailState extends State<PostDetail> {
                                                   ],
                                                 ),
                                               ),
-                                              true
-                                                  ? const SizedBox()
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: 4,
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 40),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 16),
-                                                          decoration: const BoxDecoration(
-                                                              // color: Colors.red,
-                                                              // border: Border(
-                                                              //     top: BorderSide(
-                                                              //         color:
-                                                              //             Color(0xffECECEE)))
-                                                              ),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        16.0),
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Container(
-                                                                      height:
-                                                                          25,
-                                                                      width: 25,
-                                                                      margin: const EdgeInsets
-                                                                              .only(
-                                                                          top:
-                                                                              6),
-                                                                      decoration: BoxDecoration(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          shape: BoxShape
-                                                                              .circle,
-                                                                          image: post.userProfilePic.isNotEmpty
-                                                                              ? DecorationImage(image: CachedNetworkImageProvider(post.userProfilePic), fit: BoxFit.cover)
-                                                                              : null),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          CustomText(
-                                                                        text: (post.name.isNotEmpty
-                                                                                ? post.name
-                                                                                : post.userName.isNotEmpty
-                                                                                    ? post.userName
-                                                                                    : "")
-                                                                            .toLowerCase()
-                                                                            .substring(0, 1)
-                                                                            .toUpperCase(),
-                                                                        fontSize:
-                                                                            12,
-                                                                        textColor:
-                                                                            Colors.white,
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Column(
+                                              viewCommnets.isEmpty
+                                                  ? SizedBox()
+                                                  : (viewCommnets
+                                                          .where((element) =>
+                                                              element.id ==
+                                                              comment.id)
+                                                          .isNotEmpty)
+                                                      ? ListView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount: comment
+                                                              .replies.length,
+                                                          physics:
+                                                              const NeverScrollableScrollPhysics(),
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            final replie =
+                                                                comment.replies[
+                                                                    index];
+                                                            return Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 40),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .symmetric(
+                                                                      vertical:
+                                                                          16),
+                                                              decoration: const BoxDecoration(
+                                                                  // color: Colors.red,
+                                                                  // border: Border(
+                                                                  //     top: BorderSide(
+                                                                  //         color:
+                                                                  //             Color(0xffECECEE)))
+                                                                  ),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            16.0),
+                                                                    child: Row(
                                                                       crossAxisAlignment:
                                                                           CrossAxisAlignment
                                                                               .start,
                                                                       children: [
-                                                                        // CustomText(
-                                                                        //     text: post.name,
-                                                                        //     fontSize: 12,
-                                                                        //     fontWeight:
-                                                                        //         FontWeight.w600),
-                                                                        CustomText(
-                                                                            text: post
-                                                                                .userName,
-                                                                            fontSize:
-                                                                                12,
-                                                                            fontWeight:
-                                                                                FontWeight.w600),
-                                                                        const SizedBox(
+                                                                        Container(
                                                                           height:
-                                                                              4,
+                                                                              25,
+                                                                          width:
+                                                                              25,
+                                                                          margin:
+                                                                              const EdgeInsets.only(top: 6),
+                                                                          decoration: BoxDecoration(
+                                                                              color: Colors.black,
+                                                                              shape: BoxShape.circle,
+                                                                              image: replie.userProfilePic.isNotEmpty ? DecorationImage(image: CachedNetworkImageProvider(replie.userProfilePic), fit: BoxFit.cover) : null),
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child: replie.userProfilePic.isNotEmpty
+                                                                              ? null
+                                                                              : CustomText(
+                                                                                  text: (replie.name.isNotEmpty
+                                                                                          ? replie.name
+                                                                                          : replie.userName.isNotEmpty
+                                                                                              ? replie.userName
+                                                                                              : "")
+                                                                                      .toLowerCase()
+                                                                                      .substring(0, 1)
+                                                                                      .toUpperCase(),
+                                                                                  fontSize: 12,
+                                                                                  textColor: Colors.white,
+                                                                                ),
                                                                         ),
-                                                                        CustomText(
-                                                                            text: post
-                                                                                .content,
-                                                                            overflow: TextOverflow
-                                                                                .ellipsis,
-                                                                            maxLines:
-                                                                                3,
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w400),
                                                                         const SizedBox(
-                                                                          height:
-                                                                              4,
+                                                                          width:
+                                                                              10,
                                                                         ),
-                                                                        Row(
+                                                                        Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
                                                                           children: [
-                                                                            GestureDetector(
-                                                                              onTap: () {
-                                                                                // if (post.isLikedByCurrentUser) {
-                                                                                //   context
-                                                                                //       .read<PostDetailCubit>()
-                                                                                //       .unlikePost(post.postId);
-                                                                                // } else {
-                                                                                //   context.read<PostDetailCubit>().likePost(post.postId);
-                                                                                // }
-                                                                              },
-                                                                              child: Icon(
-                                                                                post.isLikedByCurrentUser ? Icons.favorite : Icons.favorite_outline_rounded,
-                                                                                size: 14,
-                                                                                color: post.isLikedByCurrentUser ? Colors.red : const Color(0xff3F3D4E),
-                                                                              ),
-                                                                            ),
-                                                                            post.likes < 1
-                                                                                ? const SizedBox()
-                                                                                : Row(
-                                                                                    children: [
-                                                                                      const SizedBox(
-                                                                                        width: 4,
-                                                                                      ),
-                                                                                      CustomText(
-                                                                                        text: post.likes.toString(),
-                                                                                        fontSize: 12,
-                                                                                        fontWeight: FontWeight.w500,
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
+                                                                            // CustomText(
+                                                                            //     text: post.name,
+                                                                            //     fontSize: 12,
+                                                                            //     fontWeight:
+                                                                            //         FontWeight.w600),
+                                                                            CustomText(
+                                                                                text: replie.userName,
+                                                                                fontSize: 12,
+                                                                                fontWeight: FontWeight.w600),
                                                                             const SizedBox(
-                                                                              width: 16,
+                                                                              height: 4,
                                                                             ),
-                                                                            GestureDetector(
-                                                                              onTap: () {
-                                                                                context.read<CommentCubit>().addComment(post.postId, "This is my  comment");
-                                                                              },
-                                                                              child: const Icon(
-                                                                                Icons.mode_comment_outlined,
-                                                                                size: 14,
-                                                                                color: Color(0xff3F3D4E),
-                                                                              ),
+                                                                            CustomText(
+                                                                                text: replie.content,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 3,
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400),
+                                                                            const SizedBox(
+                                                                              height: 4,
                                                                             ),
+                                                                            Row(
+                                                                              children: [
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                    if (replie.isLikedByCurrentUser) {
+                                                                                      context.read<CommentCubit>().unlikeComment(comment.id, isReply: true, replyId: replie.id);
+                                                                                    } else {
+                                                                                      context.read<CommentCubit>().likeComment(comment.id, isReply: true, replyId: replie.id);
+                                                                                    }
+                                                                                  },
+                                                                                  child: Icon(
+                                                                                    replie.isLikedByCurrentUser ? Icons.favorite : Icons.favorite_outline_rounded,
+                                                                                    size: 14,
+                                                                                    color: replie.isLikedByCurrentUser ? Colors.red : const Color(0xff3F3D4E),
+                                                                                  ),
+                                                                                ),
+                                                                                replie.likes < 1
+                                                                                    ? const SizedBox()
+                                                                                    : Row(
+                                                                                        children: [
+                                                                                          const SizedBox(
+                                                                                            width: 4,
+                                                                                          ),
+                                                                                          CustomText(
+                                                                                            text: replie.likes.toString(),
+                                                                                            fontSize: 12,
+                                                                                            fontWeight: FontWeight.w500,
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                // const SizedBox(
+                                                                                //   width:
+                                                                                //       16,
+                                                                                // ),
+                                                                                // GestureDetector(
+                                                                                //   onTap:
+                                                                                //       () {
+                                                                                //     context.read<CommentCubit>().addComment(
+                                                                                //         post.postId,
+                                                                                //         "This is my  comment");
+                                                                                //   },
+                                                                                //   child:
+                                                                                //       const Icon(
+                                                                                //     Icons
+                                                                                //         .mode_comment_outlined,
+                                                                                //     size:
+                                                                                //         14,
+                                                                                //     color:
+                                                                                //         Color(0xff3F3D4E),
+                                                                                //   ),
+                                                                                // ),
+                                                                              ],
+                                                                            )
                                                                           ],
-                                                                        )
+                                                                        ),
                                                                       ],
                                                                     ),
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
+                                                            );
+                                                          },
+                                                        )
+                                                      : SizedBox(),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 60),
+                                                child: Row(
+                                                  children: [
+                                                    comment.repliesCount > 0
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              if (viewCommnets
+                                                                      .isNotEmpty &&
+                                                                  viewCommnets
+                                                                      .where((element) =>
+                                                                          element
+                                                                              .id ==
+                                                                          comment
+                                                                              .id)
+                                                                      .isNotEmpty) {
+                                                                viewCommnets.removeWhere(
+                                                                    (element) =>
+                                                                        element
+                                                                            .id ==
+                                                                        comment
+                                                                            .id);
+                                                                setState(() {});
+                                                              } else {
+                                                                context
+                                                                    .read<
+                                                                        CommentCubit>()
+                                                                    .fetchCommentsByCommentId(
+                                                                        comment
+                                                                            .postId,
+                                                                        comment
+                                                                            .id)
+                                                                    .then(
+                                                                        (value) {
+                                                                  viewCommnets.add(
+                                                                      comment);
+                                                                  setState(
+                                                                      () {});
+                                                                });
+                                                              }
+                                                            },
+                                                            child: Text(viewCommnets
+                                                                        .isNotEmpty &&
+                                                                    viewCommnets
+                                                                        .where((element) =>
+                                                                            element.id ==
+                                                                            comment.id)
+                                                                        .isNotEmpty
+                                                                ? "hide replies"
+                                                                : "view replies"))
+                                                        : SizedBox(),
+                                                  ],
+                                                ),
+                                              )
                                             ],
                                           );
                                         },
@@ -666,7 +747,7 @@ class _PostDetailState extends State<PostDetail> {
                                 },
                               ),
                               const SizedBox(
-                                height: 100,
+                                height: 180,
                               ),
                             ],
                           ),
@@ -675,72 +756,176 @@ class _PostDetailState extends State<PostDetail> {
                       Positioned(
                           bottom: 0,
                           child: Container(
-                            // height: 60,
-                            constraints: const BoxConstraints(
-                              maxHeight: 180,
-                            ),
-
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    top: BorderSide(
-                                        color: const Color(0xff726E80)
-                                            .withOpacity(0.15)))),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomInputField(
-                                    focusNode: focusNode,
-                                    hintText: "Write your comment",
-                                    maxLines: null,
-                                    controller: _commnetController,
-                                    onChanged: (value) {
-                                      if (value.isEmpty && allowReply) {
-                                        allowReply = false;
-
-                                        setState(() {});
-                                      } else {
-                                        if (!allowReply) {
-                                          allowReply = true;
-                                          setState(() {});
-                                        }
-                                      }
-                                    },
-                                  ),
-                                  allowReply
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                selectedCommnet == null
+                                    ? SizedBox()
+                                    : Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        color:
+                                            Color(0xff5348EE).withOpacity(0.1),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 12),
+                                        child: Row(
                                           children: [
-                                            CustomButton(
-                                              text: "Reply",
-                                              onPressed: () {
-                                                context
-                                                    .read<CommentCubit>()
-                                                    .addComment(
-                                                        post.postId,
-                                                        _commnetController.text
-                                                            .trim());
-                                                _commnetController.text = "";
-                                                if (focusNode.hasFocus) {
-                                                  focusNode.unfocus();
-                                                }
-                                                setState(() {});
-                                              },
-                                              height: 30,
-                                              color: const Color(0xff5348EE),
-                                              textSize: 10,
-                                              width: 60,
+                                            Container(
+                                              child: Container(
+                                                height: 25,
+                                                width: 25,
+                                                margin: const EdgeInsets.only(
+                                                    top: 6),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    shape: BoxShape.circle,
+                                                    image: selectedCommnet
+                                                                ?.userProfilePic
+                                                                .isNotEmpty ??
+                                                            false
+                                                        ? DecorationImage(
+                                                            image: CachedNetworkImageProvider(
+                                                                selectedCommnet!
+                                                                    .userProfilePic),
+                                                            fit: BoxFit.cover)
+                                                        : null),
+                                                alignment: Alignment.center,
+                                                child: selectedCommnet
+                                                            ?.userProfilePic
+                                                            .isNotEmpty ??
+                                                        false
+                                                    ? null
+                                                    : CustomText(
+                                                        text: (selectedCommnet
+                                                                        ?.userName
+                                                                        .isNotEmpty ??
+                                                                    true
+                                                                ? selectedCommnet
+                                                                        ?.userName ??
+                                                                    ""
+                                                                : "")
+                                                            .toLowerCase()
+                                                            .substring(0, 1)
+                                                            .toUpperCase(),
+                                                        fontSize: 12,
+                                                        textColor: Colors.white,
+                                                      ),
+                                              ),
                                             ),
+                                            SizedBox(
+                                              width: 12,
+                                            ),
+                                            CustomText(
+                                                text:
+                                                    "Replying to ${selectedCommnet?.userName ?? ''}",
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500),
+                                            Spacer(),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  selectedCommnet = null;
+                                                  setState(() {});
+                                                },
+                                                child: Icon(Icons.close))
                                           ],
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              ),
+                                        ),
+                                      ),
+                                Container(
+                                  // height: 60,
+                                  constraints: const BoxConstraints(
+                                    maxHeight: 180,
+                                  ),
+
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border(
+                                          top: BorderSide(
+                                              color: const Color(0xff726E80)
+                                                  .withOpacity(0.15)))),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CustomInputField(
+                                          focusNode: focusNode,
+                                          hintText: "Write your comment",
+                                          maxLines: null,
+                                          controller: _commnetController,
+                                          onChanged: (value) {
+                                            if (value.isEmpty && allowReply) {
+                                              allowReply = false;
+
+                                              setState(() {});
+                                            } else {
+                                              if (!allowReply) {
+                                                allowReply = true;
+                                                setState(() {});
+                                              }
+                                            }
+                                          },
+                                        ),
+                                        allowReply
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  CustomButton(
+                                                    text: "Reply",
+                                                    onPressed: () {
+                                                      if (selectedCommnet !=
+                                                          null) {
+                                                        context
+                                                            .read<
+                                                                CommentCubit>()
+                                                            .addComment(
+                                                                post.postId,
+                                                                _commnetController
+                                                                    .text
+                                                                    .trim(),
+                                                                parentCommentId:
+                                                                    selectedCommnet
+                                                                        ?.id)
+                                                            .then((value) {
+                                                          selectedCommnet =
+                                                              null;
+                                                          setState(() {});
+                                                        });
+                                                      } else {
+                                                        context
+                                                            .read<
+                                                                CommentCubit>()
+                                                            .addComment(
+                                                              post.postId,
+                                                              _commnetController
+                                                                  .text
+                                                                  .trim(),
+                                                            );
+                                                      }
+                                                      _commnetController.text =
+                                                          "";
+                                                      if (focusNode.hasFocus) {
+                                                        focusNode.unfocus();
+                                                      }
+                                                      setState(() {});
+                                                    },
+                                                    height: 30,
+                                                    color:
+                                                        const Color(0xff5348EE),
+                                                    textSize: 10,
+                                                    width: 60,
+                                                  ),
+                                                ],
+                                              )
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ))
                     ],

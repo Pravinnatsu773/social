@@ -9,14 +9,21 @@ import 'package:social4/screens/auth/cubit/auth_cubit.dart';
 import 'package:social4/screens/home/presentation/home.dart';
 import 'package:social4/screens/main_screen/cubit/bottom_nav_cubit.dart';
 import 'package:social4/screens/post/cubit/post_cubit.dart';
+import 'package:social4/screens/profile/cubit/profile_cubit.dart';
 import 'package:social4/screens/profile/cubit/profile_post_cubit.dart';
 import 'package:social4/screens/profile/presentation/profile.dart';
 import 'package:social4/service/app_routes.dart';
+import 'package:social4/service/notification_service.dart';
 import 'package:social4/service/shared_preference_service.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   MainScreen({super.key});
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomeTab(),
     SearchTab(),
@@ -24,6 +31,15 @@ class MainScreen extends StatelessWidget {
     SettingsTab(),
     ProfileTab(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final userId = SharedPreferencesService().getString("userID") ?? "";
+
+    context.read<ProfileCubit>().fetchUserProfile(userId);
+    NotificationService().init();
+  }
 
   @override
   Widget build(BuildContext context) {

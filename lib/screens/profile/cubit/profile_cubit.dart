@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:social4/common/model/user_model.dart';
 import 'package:social4/common/util/helper_functions.dart';
+import 'package:social4/service/notification_service.dart';
 import 'package:social4/service/shared_preference_service.dart';
 
 part 'profile_state.dart';
@@ -36,7 +37,7 @@ class ProfileCubit extends Cubit<ProfileState> {
               'name': name,
               'username': username,
               'profilePic': imagedUrl,
-              "bio": bio
+              "bio": bio,
             }
           : {
               'name': name,
@@ -55,7 +56,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         transaction.update(profileRef, updatedProfile);
         updatedProfile['id'] = userId;
 
-        final userData = UserModel.fromMap(updatedProfile);
+        final userData = UserModel(
+            id: updatedProfile['id'],
+            name: updatedProfile['name'],
+            username: updatedProfile['username'],
+            profilePic: updatedProfile['profilePic'],
+            bio: updatedProfile['bio']);
 
         _saveUserToPreferences(userData);
       });
@@ -70,12 +76,28 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> fetchUserProfile(String id) async {
     try {
+      final curentUserId = sharedPreferencesService.getString("userID");
+
+      DocumentSnapshot currentUserDoc =
+          await _firestore.collection('users').doc(curentUserId).get();
+
       DocumentSnapshot userDoc =
           await _firestore.collection('users').doc(id).get();
+
+      Map<String, dynamic> currentUserProfile =
+          currentUserDoc.data() as Map<String, dynamic>;
+
       Map<String, dynamic> userProfile = userDoc.data() as Map<String, dynamic>;
 
+      UserModel currentUserModelData = UserModel.fromMap(currentUserProfile);
       UserModel userModelData = UserModel.fromMap(userProfile);
-      emit(ProfileLoaded(userProfile: userModelData));
+
+      bool isFollowedByMe =
+          currentUserModelData.following!.contains(userModelData.id);
+      final user = userModelData.copyWith(isFollowedByMe: isFollowedByMe);
+
+      if (user.id == curentUserId) {}
+      emit(ProfileLoaded(userProfile: user));
     } catch (e) {
       emit(ProfileError(message: e.toString()));
     }
@@ -94,6 +116,77 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       return downloadUrl;
     } catch (e) {}
+  }
+
+  Future<void> followUser(String targetUserId) async {
+    try {
+      String currentUserId = sharedPreferencesService.getString("userID") ?? "";
+      if (currentUserId.isEmpty) return;
+
+      await _firestore.runTransaction((transaction) async {
+        DocumentReference currentUserRef =
+            _firestore.collection('users').doc(currentUserId);
+        DocumentReference targetUserRef =
+            _firestore.collection('users').doc(targetUserId);
+
+        DocumentSnapshot currentUserSnapshot =
+            await transaction.get(currentUserRef);
+        DocumentSnapshot targetUserSnapshot =
+            await transaction.get(targetUserRef);
+
+        if (!currentUserSnapshot.exists || !targetUserSnapshot.exists) {
+          throw Exception("User not found");
+        }
+
+        UserModel currentUser = UserModel.fromMap(
+            currentUserSnapshot.data() as Map<String, dynamic>);
+
+        UserModel targetUser = UserModel.fromMap(
+            targetUserSnapshot.data() as Map<String, dynamic>);
+
+        if (currentUser.following!.contains(targetUserId)) {
+          // Already following, so unfollow
+          transaction.update(currentUserRef, {
+            'following': FieldValue.arrayRemove([targetUserId])
+          });
+          transaction.update(targetUserRef, {
+            'followers': FieldValue.arrayRemove([currentUserId])
+          });
+          QuerySnapshot followSnapshot = await FirebaseFirestore.instance
+              .collection('follows')
+              .where('followerId', isEqualTo: currentUserId)
+              .where('followingId', isEqualTo: targetUserId)
+              .get();
+
+          for (DocumentSnapshot doc in followSnapshot.docs) {
+            await doc.reference.delete();
+          }
+        } else {
+          // Not following, so follow
+          transaction.update(currentUserRef, {
+            'following': FieldValue.arrayUnion([targetUserId])
+          });
+          transaction.update(targetUserRef, {
+            'followers': FieldValue.arrayUnion([currentUserId])
+          });
+
+          await FirebaseFirestore.instance.collection('follows').add({
+            'followerId': currentUserId,
+            'followingId': targetUserId,
+          });
+
+          String fcmToken = targetUser.fcmToken;
+          NotificationService().sendFollowNotification(fcmToken, {
+            "title": "${currentUser.name} followed you",
+            'image': currentUser.profilePic,
+          });
+        }
+      });
+
+      // emit(ProfileSuccess());
+    } catch (e) {
+      emit(ProfileError(message: e.toString()));
+    }
   }
 
   Future<void> _saveUserToPreferences(UserModel user) async {

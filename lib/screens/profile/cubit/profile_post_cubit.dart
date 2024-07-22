@@ -22,8 +22,15 @@ class ProfilePostCubit extends Cubit<ProfilePostState> {
   Future<void> fetchPosts(
       {bool isRefresh = false,
       bool isMe = false,
-      required UserModel userModelData}) async {
-    UserModel userData = userModelData;
+      UserModel? userModelData}) async {
+    // UserModel? userData = userModelData;
+
+    final userId = sharedPreferencesService.getString("userID") ?? "";
+    final name = sharedPreferencesService.getString("name") ?? "";
+    final userName = sharedPreferencesService.getString("userName") ?? "";
+    final profilePic = sharedPreferencesService.getString("profilePic") ?? "";
+
+    final bio = sharedPreferencesService.getString("bio") ?? "";
 
     if (_isLoading) return;
     _isLoading = true;
@@ -37,7 +44,7 @@ class ProfilePostCubit extends Cubit<ProfilePostState> {
 
       Query query = _firestore
           .collection('posts')
-          .where("userId", isEqualTo: userData.id)
+          .where("userId", isEqualTo: userId)
           .orderBy('timestamp', descending: true)
           .limit(postLimit);
 
@@ -48,7 +55,15 @@ class ProfilePostCubit extends Cubit<ProfilePostState> {
       QuerySnapshot postSnapshot = await query.get();
 
       for (DocumentSnapshot postDoc in postSnapshot.docs) {
-        Post post = Post.fromDocument(postDoc, userData.toMap());
+        Post post = Post.fromDocument(
+            postDoc,
+            UserModel(
+                    id: userId,
+                    bio: bio,
+                    name: name,
+                    username: userName,
+                    profilePic: profilePic)
+                .toMap());
         postList.add(post);
       }
 

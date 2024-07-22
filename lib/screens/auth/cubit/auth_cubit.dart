@@ -30,12 +30,13 @@ class AuthCubit extends Cubit<AuthState> {
       User? user = await _authRepository.signUp(email, password);
       if (user != null) {
         UserModel userData = UserModel(
-          id: user.uid,
-          name: name,
-          username: userName,
-          profilePic: "",
-          bio: "",
-        );
+            id: user.uid,
+            name: name,
+            username: userName,
+            profilePic: "",
+            bio: "",
+            followers: [],
+            following: []);
         await _firestore
             .collection('users')
             .doc(userData.id)
@@ -77,7 +78,9 @@ class AuthCubit extends Cubit<AuthState> {
           name: name ?? "",
           username: username ?? '',
           profilePic: profilePic ?? '',
-          bio: "");
+          bio: "",
+          followers: [],
+          following: []);
       emit(AuthLoaded(user: userData));
       Navigator.pushReplacementNamed(context, AppRoutes.mainScreen);
     } else {

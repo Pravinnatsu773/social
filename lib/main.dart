@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social4/common/cubit/posting_progress_cubit.dart';
@@ -14,6 +16,7 @@ import 'package:social4/screens/post/cubit/post_detail_cubit.dart';
 import 'package:social4/screens/post/presentation/post_detail.dart';
 import 'package:social4/screens/profile/cubit/profile_cubit.dart';
 import 'package:social4/service/app_routes.dart';
+import 'package:social4/service/notification_service.dart';
 import 'package:social4/service/shared_preference_service.dart';
 
 import 'screens/profile/cubit/profile_post_cubit.dart';
@@ -24,6 +27,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+
   runApp(const SocialApp());
 }
 
