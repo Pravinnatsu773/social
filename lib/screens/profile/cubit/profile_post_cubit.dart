@@ -25,12 +25,22 @@ class ProfilePostCubit extends Cubit<ProfilePostState> {
       UserModel? userModelData}) async {
     // UserModel? userData = userModelData;
 
-    final userId = sharedPreferencesService.getString("userID") ?? "";
-    final name = sharedPreferencesService.getString("name") ?? "";
-    final userName = sharedPreferencesService.getString("userName") ?? "";
-    final profilePic = sharedPreferencesService.getString("profilePic") ?? "";
+    final userId = userModelData != null
+        ? userModelData.id
+        : sharedPreferencesService.getString("userID") ?? "";
+    final name = userModelData != null
+        ? userModelData.name
+        : sharedPreferencesService.getString("name") ?? "";
+    final userName = userModelData != null
+        ? userModelData.username
+        : sharedPreferencesService.getString("userName") ?? "";
+    final profilePic = userModelData != null
+        ? userModelData.profilePic
+        : sharedPreferencesService.getString("profilePic") ?? "";
 
-    final bio = sharedPreferencesService.getString("bio") ?? "";
+    final bio = userModelData != null
+        ? userModelData.bio
+        : sharedPreferencesService.getString("bio") ?? "";
 
     if (_isLoading) return;
     _isLoading = true;

@@ -35,16 +35,16 @@ class NotificationService {
 
   Future<void> sendFollowNotification(
       String fcmToken, Map<String, dynamic> body) async {
-    String serverKey =
-        'ya29.c.c0ASRK0GaMEvACATFpSuxKMlnwpnMqv-79LKY2u1pG-pFtZqfXcbdemExwHLvEGoeI9VGPVIgxRXYVdV7Ofgoe40eW_MwkvNnLwB6wp1qj8NZywOSNtwZuwxmnRXGOaIAVZN2Tkx9Ojc3OsE7dQmCsb7x0PKBKTIRlJSjB_k2PUJ0DYhyk68_4EJPOHuV9z-aGHuYsnyZogGT5TCvhWer2s5EdHQoaqBhtUer03Wr5VLC2Os0FKkQ3TCMd2odYxsV8G_2WDGG4lwkTrQ7vjJNYlsUTKI8sllkZH8d-u9SZIusgSGk4owUiRHujCUpc4N7i_30QJ0x3W2bYXm8neZjjAGFSobCkM6KeXD6rubi4LcRAnekrUUWP7-JdE385AoqrOfZRcZfkS3xzBpBMRQnvcXgsqjinzdkSW7Oy-gsn2dvvd62rqJFfdk96izSbeuIn_8Rs_3OS0BYW_YytU85izfwyg_iicwJ1InqgSlf2xgwhOI305SYXdUM8bZmrlbic4l9nswnYq5Ud05aS-ZtYlSYslyR0JViOYOm-bZOt2gyZIMhfpaQxmUbpdUJYzc9czf3mhtf8MsSJBhfdlyl9Y44lojqc5JkniyspUxMn-lzsweZyWjti4uqaUk8nBxUtFs_81qQJUIkS4l_hlsQ55M4tYV3vpx5BSfzYJxFdtcM-jQJFqwMVizXBrsvUeqc1s5gpv5McgW3aj1fJ6mzsuk8exQR0FJoV2BylxBnR6cqIq7WvjatglIWf8cnX4IQV-jU9ZX_do35mZO-ngSX8_dQ5Wi8S5epvF9fuOy_7afmVn77t16wykukIdtl9RuVY5JeWpSJrg3Sag_hf36Vd4dbsyX6-xgJeFaw6X6wqUQmiVRopaaMQXZ8BgUZZQJBj7bO2pcddskWws31YFRmk054jFWwju7yz72bz0v4bu8mnubx1bzk5uWuy8cd0Rh6qFQpJuVcamVneQ77pj1nu5psy5WiXJ7cOIc1FzrZqfakRMrQtWeUBIYh'; // Replace with your FCM server key
+    // Replace with your FCM server key
 
     try {
+      String authKey = await getAccessToken();
       final response = await http.post(
         Uri.parse(
             'https://fcm.googleapis.com/v1/projects/social-e88f0/messages:send'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $serverKey',
+          'Authorization': 'Bearer $authKey',
         },
         body: jsonEncode({
           "message": {"token": fcmToken, "notification": body}
@@ -56,7 +56,7 @@ class NotificationService {
     }
   }
 
-  Future getAccessToken() async {
+  Future<String> getAccessToken() async {
     final _clientId = ClientId(
       '912665399185-rdj0tr5fhct83oo4441mril3630nasom.apps.googleusercontent.com', // Replace with your OAuth 2.0 Client ID
     );

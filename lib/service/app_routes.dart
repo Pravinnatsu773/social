@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social4/common/model/user_model.dart';
 import 'package:social4/screens/auth/presentation/login_page.dart';
 import 'package:social4/screens/main_screen/presentation/main_screen.dart';
 import 'package:social4/screens/onboarding/presentation/onboarding.dart';
@@ -8,6 +10,7 @@ import 'package:social4/screens/auth/presentation/sign_up_page.dart';
 import 'package:social4/screens/post/presentation/create_post.dart';
 import 'package:social4/screens/post/presentation/post_detail.dart';
 import 'package:social4/screens/profile/presentation/edit_profile.dart';
+import 'package:social4/screens/profile/presentation/following_followers.dart';
 import 'package:social4/screens/profile/presentation/freinds_profile_detail.dart';
 import 'package:social4/screens/setting/setting.dart';
 import 'package:social4/screens/splashscreen/splash_screen.dart';
@@ -29,6 +32,8 @@ class AppRoutes {
 
   static const String settingScreen = "/settingScreen";
 
+  static const String followingFollowers = "/followingFollowers";
+
   // Add other route names
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -47,6 +52,17 @@ class AppRoutes {
 
       case settingScreen:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
+
+      case followingFollowers:
+        UserModel? user;
+        if (settings.arguments != null) {
+          final args = settings.arguments as Map<String, dynamic>;
+          user = args['user'] as UserModel;
+        }
+        return MaterialPageRoute(
+            builder: (_) => FollowingFollowers(
+                  user: user!,
+                ));
 
       case editProfile:
         late VoidCallback callBack;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social4/common/ui/custom_button.dart';
 import 'package:social4/common/ui/custom_input_field.dart';
 import 'package:social4/common/ui/custom_text.dart';
@@ -143,9 +144,9 @@ class _PostDetailState extends State<PostDetail> {
                                                 CustomText(
                                                     text: "@${post.userName}",
                                                     textColor:
-                                                        const Color(0xff726E80),
+                                                        const Color(0xff384747),
                                                     fontSize: 12,
-                                                    fontWeight: FontWeight.w500)
+                                                    fontWeight: FontWeight.w400)
                                               ],
                                             ),
                                           ],
@@ -154,20 +155,6 @@ class _PostDetailState extends State<PostDetail> {
                                     ),
                                     const SizedBox(
                                       height: 12,
-                                    ),
-                                    post.content.isEmpty
-                                        ? const SizedBox()
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16.0),
-                                            child: CustomText(
-                                                text: post.content,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 3,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w400)),
-                                    SizedBox(
-                                      height: post.content.isEmpty ? 0 : 12,
                                     ),
                                     post.img.isNotEmpty
                                         ? Container(
@@ -188,8 +175,22 @@ class _PostDetailState extends State<PostDetail> {
                                                     fit: BoxFit.cover)),
                                           )
                                         : const SizedBox(),
-                                    const SizedBox(
-                                      height: 12,
+                                    SizedBox(
+                                      height: post.img.isEmpty ? 0 : 12,
+                                    ),
+                                    post.content.isEmpty
+                                        ? const SizedBox()
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16.0),
+                                            child: CustomText(
+                                                text: post.content,
+                                                // overflow: TextOverflow.ellipsis,
+                                                // maxLines: 3,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400)),
+                                    SizedBox(
+                                      height: post.content.isEmpty ? 0 : 12,
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -208,15 +209,21 @@ class _PostDetailState extends State<PostDetail> {
                                                     .likePost(post.postId);
                                               }
                                             },
-                                            child: Icon(
+                                            // child: Icon(
+                                            //   post.isLikedByCurrentUser
+                                            //       ? Icons.favorite
+                                            //       : Icons
+                                            //           .favorite_outline_rounded,
+                                            //   size: 24,
+                                            //   color: post.isLikedByCurrentUser
+                                            //       ? Colors.red
+                                            //       : const Color(0xff3F3D4E),
+                                            // ),
+                                            child: SvgPicture.asset(
                                               post.isLikedByCurrentUser
-                                                  ? Icons.favorite
-                                                  : Icons
-                                                      .favorite_outline_rounded,
-                                              size: 24,
-                                              color: post.isLikedByCurrentUser
-                                                  ? Colors.red
-                                                  : const Color(0xff3F3D4E),
+                                                  ? 'assets/images/favorite-filled.svg'
+                                                  : 'assets/images/favorite.svg',
+                                              height: 24,
                                             ),
                                           ),
                                           post.likes < 1
@@ -240,10 +247,14 @@ class _PostDetailState extends State<PostDetail> {
                                           ),
                                           GestureDetector(
                                             onTap: () {},
-                                            child: const Icon(
-                                              Icons.mode_comment_outlined,
-                                              size: 24,
-                                              color: Color(0xff3F3D4E),
+                                            // child: const Icon(
+                                            //   Icons.mode_comment_outlined,
+                                            //   size: 24,
+                                            //   color: Color(0xff3F3D4E),
+                                            // ),
+                                            child: SvgPicture.asset(
+                                              'assets/images/comment-outline.svg',
+                                              height: 26,
                                             ),
                                           ),
                                           post.commentCount < 1
@@ -262,14 +273,14 @@ class _PostDetailState extends State<PostDetail> {
                                                     ),
                                                   ],
                                                 ),
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                          const Icon(
-                                            Icons.share,
-                                            size: 24,
-                                            color: Color(0xff3F3D4E),
-                                          ),
+                                          // const SizedBox(
+                                          //   width: 16,
+                                          // ),
+                                          // const Icon(
+                                          //   Icons.share,
+                                          //   size: 24,
+                                          //   color: Color(0xff3F3D4E),
+                                          // ),
                                         ],
                                       ),
                                     )
@@ -437,16 +448,24 @@ class _PostDetailState extends State<PostDetail> {
                                                                               .likeComment(comment.id);
                                                                         }
                                                                       },
-                                                                      child:
-                                                                          Icon(
+                                                                      // child:
+                                                                      //     Icon(
+                                                                      //   comment.isLikedByCurrentUser
+                                                                      //       ? Icons.favorite
+                                                                      //       : Icons.favorite_outline_rounded,
+                                                                      //   size:
+                                                                      //       16,
+                                                                      //   color: comment.isLikedByCurrentUser
+                                                                      //       ? Colors.red
+                                                                      //       : const Color(0xff3F3D4E),
+                                                                      // ),
+                                                                      child: SvgPicture
+                                                                          .asset(
                                                                         comment.isLikedByCurrentUser
-                                                                            ? Icons.favorite
-                                                                            : Icons.favorite_outline_rounded,
-                                                                        size:
+                                                                            ? 'assets/images/favorite-filled.svg'
+                                                                            : 'assets/images/favorite.svg',
+                                                                        height:
                                                                             16,
-                                                                        color: comment.isLikedByCurrentUser
-                                                                            ? Colors.red
-                                                                            : const Color(0xff3F3D4E),
                                                                       ),
                                                                     ),
                                                                     comment.likes <
@@ -475,14 +494,11 @@ class _PostDetailState extends State<PostDetail> {
                                                                         setState(
                                                                             () {});
                                                                       },
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .mode_comment_outlined,
-                                                                        size:
+                                                                      child: SvgPicture
+                                                                          .asset(
+                                                                        'assets/images/comment-outline.svg',
+                                                                        height:
                                                                             16,
-                                                                        color: Color(
-                                                                            0xff3F3D4E),
                                                                       ),
                                                                     ),
                                                                     comment.repliesCount <
@@ -850,23 +866,41 @@ class _PostDetailState extends State<PostDetail> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        CustomInputField(
-                                          focusNode: focusNode,
-                                          hintText: "Write your comment",
-                                          maxLines: null,
-                                          controller: _commnetController,
-                                          onChanged: (value) {
-                                            if (value.isEmpty && allowReply) {
-                                              allowReply = false;
+                                        Container(
+                                          // padding: EdgeInsets.all(2),
+                                          // decoration: BoxDecoration(
+                                          //     color: const Color(0xffECECEE),
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(50)),
+                                          child: Center(
+                                            child: CustomInputField(
+                                              fillColor: Colors.grey.shade200,
+                                              borderColor: Colors.grey.shade200,
+                                              borderRadius: 24,
+                                              // showBorder: false,
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 12),
+                                              focusNode: focusNode,
+                                              hintText: "Write your comment",
+                                              maxLines: null,
+                                              controller: _commnetController,
+                                              onChanged: (value) {
+                                                if (value.isEmpty &&
+                                                    allowReply) {
+                                                  allowReply = false;
 
-                                              setState(() {});
-                                            } else {
-                                              if (!allowReply) {
-                                                allowReply = true;
-                                                setState(() {});
-                                              }
-                                            }
-                                          },
+                                                  setState(() {});
+                                                } else {
+                                                  if (!allowReply) {
+                                                    allowReply = true;
+                                                    setState(() {});
+                                                  }
+                                                }
+                                              },
+                                            ),
+                                          ),
                                         ),
                                         allowReply
                                             ? Row(

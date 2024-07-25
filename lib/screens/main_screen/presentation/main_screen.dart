@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social4/common/cubit/posting_progress_cubit.dart';
 import 'package:social4/common/model/user_model.dart';
-import 'package:social4/common/ui/custom_button.dart';
-import 'package:social4/screens/auth/cubit/auth_cubit.dart';
+import 'package:social4/screens/communities/presentation/community.dart';
 import 'package:social4/screens/home/presentation/home.dart';
 import 'package:social4/screens/main_screen/cubit/bottom_nav_cubit.dart';
 import 'package:social4/screens/post/cubit/post_cubit.dart';
@@ -26,7 +25,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomeTab(),
-    SearchTab(),
+    Community(),
     SizedBox(),
     SettingsTab(),
     ProfileTab(),
@@ -65,9 +64,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Icon(state == 4
-                      ? Icons.settings_outlined
-                      : Icons.notifications_outlined),
+                  child: Icon(state == 4 ? Icons.settings_outlined : null),
                 ),
               )
             ],
@@ -109,8 +106,8 @@ class _CustomBottomNavigationBar extends StatelessWidget {
           ),
           _NavItem(
             index: 3,
-            icon: Icons.format_quote_rounded,
-            label: 'Quotes',
+            icon: Icons.notifications_outlined,
+            label: 'notification',
           ),
           _NavItem(
             index: 4,
@@ -180,22 +177,13 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-class SearchTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Search Tab'),
-    );
-  }
-}
-
 class SettingsTab extends StatelessWidget {
   const SettingsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Something new'),
+      child: Text('Notifications'),
     );
   }
 }

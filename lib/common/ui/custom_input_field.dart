@@ -14,9 +14,13 @@ class CustomInputField extends StatelessWidget {
   final Widget? prefix;
 
   final Widget? suffix;
+  final double borderRadius;
+  final Color? borderColor;
   final TextStyle? prefixStyle;
   final FocusNode? focusNode;
   final Function(String)? onChanged;
+  final EdgeInsets? contentPadding;
+  final Color fillColor;
   const CustomInputField(
       {Key? key,
       required this.hintText,
@@ -32,7 +36,11 @@ class CustomInputField extends StatelessWidget {
       this.prefix,
       this.prefixStyle,
       this.focusNode,
-      this.suffix})
+      this.suffix,
+      this.fillColor = Colors.white,
+      this.borderRadius = 8.0,
+      this.borderColor,
+      this.contentPadding})
       : super(key: key);
 
   @override
@@ -40,6 +48,7 @@ class CustomInputField extends StatelessWidget {
     return TextField(
       key: Key(hintText),
       enabled: enabled,
+
       controller: controller,
       focusNode: focusNode,
       keyboardType: keyboardType,
@@ -61,47 +70,53 @@ class CustomInputField extends StatelessWidget {
         suffixIcon: suffix,
         prefixIcon: prefix,
         // prefixStyle: prefixStyle,
-        prefixIconConstraints: BoxConstraints(maxWidth: 28),
-        counter: SizedBox(),
+        prefixIconConstraints: const BoxConstraints(maxWidth: 28),
+        counter: const SizedBox(),
         hintStyle: const TextStyle(
             color: Color(0xff8F8D9B), fontWeight: FontWeight.w400),
         hintText: hintText,
         filled: true,
-        fillColor: Colors.white,
-        contentPadding:
+        fillColor: fillColor,
+
+        contentPadding: contentPadding ??
             const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+
         border: showBorder
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300, // Light grey border color
+                  color: borderColor ??
+                      Colors.grey.shade300, // Light grey border color
                   width: 1.5,
                 ),
               )
             : InputBorder.none,
         enabledBorder: showBorder
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300, // Light grey border color
+                  color: borderColor ??
+                      Colors.grey.shade300, // Light grey border color
                   width: 1.5,
                 ),
               )
             : InputBorder.none,
         disabledBorder: showBorder
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300, // Light grey border color
+                  color: borderColor ??
+                      Colors.grey.shade300, // Light grey border color
                   width: 1.5,
                 ),
               )
             : InputBorder.none,
         focusedBorder: showBorder
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300, // Slightly darker grey for focus
+                  color: borderColor ??
+                      Colors.grey.shade300, // Slightly darker grey for focus
                   width: 1.5,
                 ),
               )

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social4/common/model/user_model.dart';
 import 'package:social4/common/ui/custom_button.dart';
 import 'package:social4/common/ui/custom_text.dart';
@@ -194,9 +195,9 @@ class _ProfileSectionState extends State<ProfileSection>
                                 fontWeight: FontWeight.w700),
                             CustomText(
                                 text: "@${widget.userName}",
-                                textColor: const Color(0xff726E80),
+                                textColor: const Color(0xff384747),
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500)
+                                fontWeight: FontWeight.w400)
                           ],
                         ),
                         // SizedBox(
@@ -249,11 +250,27 @@ class _ProfileSectionState extends State<ProfileSection>
                             SizedBox(
                               width: 4,
                             ),
-                            CustomText(
-                                text: "Following",
-                                textColor: const Color(0xff726E80),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.followingFollowers,
+                                    arguments: {
+                                      'user': UserModel(
+                                          id: widget.userId,
+                                          name: widget.name,
+                                          username: widget.userName,
+                                          profilePic: widget.profilePic,
+                                          bio: widget.bio,
+                                          followers: widget.follower,
+                                          following: widget.following)
+                                    });
+                              },
+                              child: CustomText(
+                                  text: "Following",
+                                  textColor: const Color(0xff726E80),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
+                            ),
                             SizedBox(
                               width: 16,
                             ),
@@ -264,11 +281,27 @@ class _ProfileSectionState extends State<ProfileSection>
                             SizedBox(
                               width: 4,
                             ),
-                            CustomText(
-                                text: "Followers",
-                                textColor: const Color(0xff726E80),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400)
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.followingFollowers,
+                                    arguments: {
+                                      'user': UserModel(
+                                          id: widget.userId,
+                                          name: widget.name,
+                                          username: widget.userName,
+                                          profilePic: widget.profilePic,
+                                          bio: widget.bio,
+                                          followers: widget.follower,
+                                          following: widget.following)
+                                    });
+                              },
+                              child: CustomText(
+                                  text: "Followers",
+                                  textColor: const Color(0xff726E80),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
+                            )
                           ],
                         ),
                       ],
@@ -318,9 +351,6 @@ class _ProfileSectionState extends State<ProfileSection>
                       Tab(
                         text: "Post",
                       ),
-                      // Tab(
-                      //   text: "Comments",
-                      // ),
                       Tab(
                         text: "Media",
                       ),
@@ -453,9 +483,9 @@ class _ProfileSectionState extends State<ProfileSection>
                                             CustomText(
                                                 text: "@${post.userName}",
                                                 textColor:
-                                                    const Color(0xff726E80),
+                                                    const Color(0xff384747),
                                                 fontSize: 12,
-                                                fontWeight: FontWeight.w500)
+                                                fontWeight: FontWeight.w400)
                                           ],
                                         ),
                                       ],
@@ -527,15 +557,21 @@ class _ProfileSectionState extends State<ProfileSection>
                                               }
                                             }
                                           },
-                                          child: Icon(
-                                              post.isLikedByCurrentUser
-                                                  ? Icons.favorite
-                                                  : Icons
-                                                      .favorite_outline_rounded,
-                                              size: 24,
-                                              color: post.isLikedByCurrentUser
-                                                  ? Colors.red
-                                                  : const Color(0xff726E80)),
+                                          // child: Icon(
+                                          //     post.isLikedByCurrentUser
+                                          //         ? Icons.favorite
+                                          //         : Icons
+                                          //             .favorite_outline_rounded,
+                                          //     size: 24,
+                                          //     color: post.isLikedByCurrentUser
+                                          //         ? Colors.red
+                                          //         : const Color(0xff726E80)),
+                                          child: SvgPicture.asset(
+                                            post.isLikedByCurrentUser
+                                                ? 'assets/images/favorite-filled.svg'
+                                                : 'assets/images/favorite.svg',
+                                            height: 24,
+                                          ),
                                         ),
                                         post.likes < 1
                                             ? const SizedBox()
@@ -554,10 +590,9 @@ class _ProfileSectionState extends State<ProfileSection>
                                         const SizedBox(
                                           width: 16,
                                         ),
-                                        const Icon(
-                                          Icons.mode_comment_outlined,
-                                          size: 24,
-                                          color: Color(0xff726E80),
+                                        SvgPicture.asset(
+                                          'assets/images/comment-outline.svg',
+                                          height: 26,
                                         ),
                                         post.commentCount < 1
                                             ? const SizedBox()
@@ -574,14 +609,14 @@ class _ProfileSectionState extends State<ProfileSection>
                                                   ),
                                                 ],
                                               ),
-                                        const SizedBox(
-                                          width: 16,
-                                        ),
-                                        const Icon(
-                                          Icons.share,
-                                          size: 24,
-                                          color: Color(0xff726E80),
-                                        ),
+                                        // const SizedBox(
+                                        //   width: 16,
+                                        // ),
+                                        // const Icon(
+                                        //   Icons.share,
+                                        //   size: 24,
+                                        //   color: Color(0xff726E80),
+                                        // ),
                                       ],
                                     ),
                                   )
@@ -599,7 +634,6 @@ class _ProfileSectionState extends State<ProfileSection>
               }
             },
           ),
-          // const SizedBox(),
           BlocBuilder<ProfilePostCubit, ProfilePostState>(
             bloc: !widget.isMe ? _profilePostCubit : null,
             builder: (context, state) {
@@ -724,9 +758,9 @@ class _ProfileSectionState extends State<ProfileSection>
                                             CustomText(
                                                 text: "@${post.userName}",
                                                 textColor:
-                                                    const Color(0xff726E80),
+                                                    const Color(0xff384747),
                                                 fontSize: 12,
-                                                fontWeight: FontWeight.w500)
+                                                fontWeight: FontWeight.w400)
                                           ],
                                         ),
                                       ],
@@ -798,15 +832,21 @@ class _ProfileSectionState extends State<ProfileSection>
                                               }
                                             }
                                           },
-                                          child: Icon(
-                                              post.isLikedByCurrentUser
-                                                  ? Icons.favorite
-                                                  : Icons
-                                                      .favorite_outline_rounded,
-                                              size: 24,
-                                              color: post.isLikedByCurrentUser
-                                                  ? Colors.red
-                                                  : const Color(0xff726E80)),
+                                          // child: Icon(
+                                          //     post.isLikedByCurrentUser
+                                          //         ? Icons.favorite
+                                          //         : Icons
+                                          //             .favorite_outline_rounded,
+                                          //     size: 24,
+                                          //     color: post.isLikedByCurrentUser
+                                          //         ? Colors.red
+                                          //         : const Color(0xff726E80)),
+                                          child: SvgPicture.asset(
+                                            post.isLikedByCurrentUser
+                                                ? 'assets/images/favorite-filled.svg'
+                                                : 'assets/images/favorite.svg',
+                                            height: 24,
+                                          ),
                                         ),
                                         post.likes < 1
                                             ? const SizedBox()
@@ -825,10 +865,9 @@ class _ProfileSectionState extends State<ProfileSection>
                                         const SizedBox(
                                           width: 16,
                                         ),
-                                        const Icon(
-                                          Icons.mode_comment_outlined,
-                                          size: 24,
-                                          color: Color(0xff726E80),
+                                        SvgPicture.asset(
+                                          'assets/images/comment-outline.svg',
+                                          height: 26,
                                         ),
                                         post.commentCount < 1
                                             ? const SizedBox()
@@ -845,14 +884,14 @@ class _ProfileSectionState extends State<ProfileSection>
                                                   ),
                                                 ],
                                               ),
-                                        const SizedBox(
-                                          width: 16,
-                                        ),
-                                        const Icon(
-                                          Icons.share,
-                                          size: 24,
-                                          color: Color(0xff726E80),
-                                        ),
+                                        // const SizedBox(
+                                        //   width: 16,
+                                        // ),
+                                        // const Icon(
+                                        //   Icons.share,
+                                        //   size: 24,
+                                        //   color: Color(0xff726E80),
+                                        // ),
                                       ],
                                     ),
                                   )

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social4/common/cubit/posting_progress_cubit.dart';
 import 'package:social4/common/ui/custom_text.dart';
 import 'package:social4/common/ui/posting_progress_ui.dart';
@@ -130,31 +131,17 @@ class _HomeTabState extends State<HomeTab> {
                                             CustomText(
                                                 text: "@${post.userName}",
                                                 textColor:
-                                                    const Color(0xff726E80),
+                                                    const Color(0xff384747),
                                                 fontSize: 12,
-                                                fontWeight: FontWeight.w500)
+                                                fontWeight: FontWeight.w400)
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                post.content.isEmpty
-                                    ? const SizedBox()
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16.0),
-                                        child: CustomText(
-                                            text: post.content,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 3,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400)),
                                 SizedBox(
-                                  height: post.content.isEmpty ? 0 : 12,
+                                  height: 12,
                                 ),
                                 post.img.isNotEmpty
                                     ? Container(
@@ -178,6 +165,21 @@ class _HomeTabState extends State<HomeTab> {
                                 SizedBox(
                                   height: post.img.isEmpty ? 0 : 12,
                                 ),
+                                post.content.isEmpty
+                                    ? const SizedBox()
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0),
+                                        child: CustomText(
+                                            text: post.content,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            fontSize: 16,
+                                            textColor: const Color(0xff384747),
+                                            fontWeight: FontWeight.w400)),
+                                SizedBox(
+                                  height: post.content.isEmpty ? 0 : 12,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16.0),
@@ -195,14 +197,20 @@ class _HomeTabState extends State<HomeTab> {
                                                 .likePost(post.postId);
                                           }
                                         },
-                                        child: Icon(
+                                        // child: Icon(
+                                        //   post.isLikedByCurrentUser
+                                        //       ? Icons.favorite
+                                        //       : Icons.favorite_outline_rounded,
+                                        //   size: 24,
+                                        //   color: post.isLikedByCurrentUser
+                                        //       ? Color(0xFFF44336)
+                                        //       : const Color(0xff726E80),
+                                        // ),
+                                        child: SvgPicture.asset(
                                           post.isLikedByCurrentUser
-                                              ? Icons.favorite
-                                              : Icons.favorite_outline_rounded,
-                                          size: 24,
-                                          color: post.isLikedByCurrentUser
-                                              ? Colors.red
-                                              : const Color(0xff726E80),
+                                              ? 'assets/images/favorite-filled.svg'
+                                              : 'assets/images/favorite.svg',
+                                          height: 24,
                                         ),
                                       ),
                                       post.likes < 1
@@ -214,7 +222,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 ),
                                                 CustomText(
                                                   text: post.likes.toString(),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ],
@@ -230,9 +238,13 @@ class _HomeTabState extends State<HomeTab> {
                                                 "postId": post.postId
                                               });
                                         },
-                                        child: Icon(Icons.mode_comment_outlined,
-                                            size: 24,
-                                            color: const Color(0xff726E80)),
+                                        // child: Icon(Icons.mode_comment_outlined,
+                                        //     size: 24,
+                                        //     color: const Color(0xff726E80)),
+                                        child: SvgPicture.asset(
+                                          'assets/images/comment-outline.svg',
+                                          height: 26,
+                                        ),
                                       ),
                                       post.commentCount < 1
                                           ? SizedBox()
@@ -244,19 +256,19 @@ class _HomeTabState extends State<HomeTab> {
                                                 CustomText(
                                                   text: post.commentCount
                                                       .toString(),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ],
                                             ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      Icon(
-                                        Icons.share,
-                                        size: 24,
-                                        color: const Color(0xff726E80),
-                                      ),
+                                      // SizedBox(
+                                      //   width: 16,
+                                      // ),
+                                      // Icon(
+                                      //   Icons.share,
+                                      //   size: 24,
+                                      //   color: const Color(0xff726E80),
+                                      // ),
                                     ],
                                   ),
                                 )
