@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social4/common/ui/custom_text.dart';
+import 'package:social4/service/app_routes.dart';
 
 class Community extends StatefulWidget {
   const Community({super.key});
@@ -30,91 +31,97 @@ class _CommunityState extends State<Community> {
             ListView.builder(
               itemCount: imageList.length,
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: const Color(0xffECECEE),
-                      )),
-                  height: 400,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 180,
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(16),
-                              topRight: Radius.circular(16)),
-                          child: CachedNetworkImage(
-                            imageUrl: imageList[index],
-                            fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.communityDetail,
+                        arguments: {'img': imageList[index]});
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xffECECEE),
+                        )),
+                    height: 400,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: 180,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16)),
+                            child: CachedNetworkImage(
+                              imageUrl: imageList[index],
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Column(
-                          children: [
-                            const CustomText(
-                                text:
-                                    "Anime Haven: Your Ultimate Community for All Things Anime",
-                                fontSize: 18,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                fontWeight: FontWeight.w700),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const CustomText(
-                                text:
-                                    "Welcome to Anime Haven, the ultimate community for anime enthusiasts! Join us to discuss your favorite series, discover new recommendations, share fan art, and connect with like-minded fans from around the world. Whether you're a seasoned otaku or just starting your anime journey, Anime Haven is your go-to place for everything anime. Let's celebrate our love for anime together!",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                                fontSize: 14,
-                                textColor: Color(0xff384747),
-                                fontWeight: FontWeight.w400),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            Row(
-                              children: [
-                                ...List.generate(
-                                    5,
-                                    (index) => index == 4
-                                        ? const CustomText(
-                                            text: "219 members",
-                                            fontSize: 14,
-                                            // maxLines: 2,
-                                            textColor: Color(0xff384747),
-                                            // overflow: TextOverflow.ellipsis,
-                                            fontWeight: FontWeight.w500)
-                                        : Container(
-                                            margin:
-                                                const EdgeInsets.only(right: 8),
-                                            height: 30,
-                                            width: 30,
-                                            decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    image: CachedNetworkImageProvider(
-                                                        'https://wallpapersmug.com/thumb/d0eb43/monkey-d-luffy-one-piece-aime.jpg'),
-                                                    fit: BoxFit.cover)),
-                                          ))
-                              ],
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 12,
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Column(
+                            children: [
+                              const CustomText(
+                                  text:
+                                      "Anime Haven: Your Ultimate Community for All Things Anime",
+                                  fontSize: 18,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontWeight: FontWeight.w700),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              const CustomText(
+                                  text:
+                                      "Welcome to Anime Haven, the ultimate community for anime enthusiasts! Join us to discuss your favorite series, discover new recommendations, share fan art, and connect with like-minded fans from around the world. Whether you're a seasoned otaku or just starting your anime journey, Anime Haven is your go-to place for everything anime. Let's celebrate our love for anime together!",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
+                                  fontSize: 14,
+                                  textColor: Color(0xff384747),
+                                  fontWeight: FontWeight.w400),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Row(
+                                children: [
+                                  ...List.generate(
+                                      5,
+                                      (index) => index == 4
+                                          ? const CustomText(
+                                              text: "219 members",
+                                              fontSize: 14,
+                                              // maxLines: 2,
+                                              textColor: Color(0xff384747),
+                                              // overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.w500)
+                                          : Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 8),
+                                              height: 30,
+                                              width: 30,
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: CachedNetworkImageProvider(
+                                                          'https://wallpapersmug.com/thumb/d0eb43/monkey-d-luffy-one-piece-aime.jpg'),
+                                                      fit: BoxFit.cover)),
+                                            ))
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

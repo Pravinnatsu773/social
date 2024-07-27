@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social4/common/model/user_model.dart';
 import 'package:social4/screens/auth/presentation/login_page.dart';
+import 'package:social4/screens/communities/presentation/community_detail.dart';
 import 'package:social4/screens/main_screen/presentation/main_screen.dart';
 import 'package:social4/screens/onboarding/presentation/onboarding.dart';
 import 'package:social4/screens/auth/presentation/sign_up_page.dart';
@@ -33,6 +34,8 @@ class AppRoutes {
   static const String settingScreen = "/settingScreen";
 
   static const String followingFollowers = "/followingFollowers";
+
+  static const String communityDetail = "/communityDetail";
 
   // Add other route names
 
@@ -110,6 +113,17 @@ class AppRoutes {
             builder: (_) => FreindsProfileDetail(
                   userId: userId,
                   userName: userName,
+                ));
+
+      case communityDetail:
+        String img = "";
+        if (settings.arguments != null) {
+          final args = settings.arguments as Map<String, dynamic>;
+          img = args['img'] ?? "";
+        }
+        return MaterialPageRoute(
+            builder: (_) => CommunityDetail(
+                  img: img,
                 ));
 
       // Add other case statements for your routes
